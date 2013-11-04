@@ -3,7 +3,9 @@
 %% API
 -export([
 	start/0,
-	stop/0
+	stop/0,
+	push/2,
+	set_api_key/1
 ]).
 
 %% Application behaviour
@@ -28,6 +30,10 @@ start() ->
 	ok.
 
 stop() -> application:stop(?MODULE).
+
+push(Key, Val) -> ducksboard_srv:push(Key, Val).
+
+set_api_key(ApiKey) -> ducksboard_srv:set_api_key(ApiKey).
 
 %% ===================================================================
 %% Application callbacks
