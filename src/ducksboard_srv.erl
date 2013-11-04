@@ -39,7 +39,7 @@ start_link(ApiKey) -> gen_server:start_link({local, ?MODULE}, ?MODULE, [ApiKey],
 
 set_api_key(ApiKey) -> gen_server:cast(?MODULE, {set_api_key, ApiKey}).
 
-push(Key, Val) -> gen_server:cast({push, Key, Val}).
+push(Key, Val) -> gen_server:cast(?MODULE, {push, Key, Val}).
 
 %% ===================================================================
 %% Gen_server callbacks
