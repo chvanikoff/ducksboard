@@ -50,15 +50,15 @@ init([ApiKey]) -> {ok, #state{headers = get_headers(ApiKey)}}.
 handle_call(_Request, _From, State) -> {reply, ignored, State}.
 
 handle_cast({set_api_key, ApiKey}, State) ->
-	{noreply, State#state{headers = get_headers()}};
-handle_cast({push, Key, Val}, #state{headers = Headers} = State) ->
+	{noreply, State#state{headers = get_headers(ApiKey)}};
+handle_cast({push, Key, Value}, #state{headers = Headers} = State) ->
 	Timestamp = timer:now_diff(os:timestamp(), {0,0,0}) div 1000000,
 	JSON = jsx:encode([
 		{<<"timestamp">>, Timestamp},
 		{<<"value">>, Value}
 	]),
 	case httpc:request(post, {?URL ++ Key, Headers, "application/x-www-form-urlencoded", JSON}, ?OPTS, []) of
-		{ok, {{"HTTP/1.1", 200, "OK"}, _, Response}} ->  ok;
+		{ok, {{"HTTP/1.1", 200, "OK"}, _, _}} ->  ok;
 		Answer -> io:format("Could not push data to widget ~p, answer:~n~p~n", [Key, Answer])
 	end,
 	{noreply, State};
